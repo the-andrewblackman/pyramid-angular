@@ -1,0 +1,8 @@
+<div id="pyramid">
+    <div *ngFor="let row of pyramidData; let rowIndex = index" class="pyramid-row">
+      <div *ngFor="let number of row; let colIndex = index" class="pyramid-number" [attr.data-row]="rowIndex" [attr.data-col]="colIndex">
+        {{ number }}
+      </div>
+    </div>
+  </div>
+  

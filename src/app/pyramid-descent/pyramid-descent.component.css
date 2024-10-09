@@ -1,0 +1,13 @@
+.pyramid-row {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+}
+.pyramid-number {
+      margin: 5px;
+      padding: 10px;
+      background-color: lightgray;
+      border: 1px solid #000;
+      text-align: center;
+      width: 30px;
+}
