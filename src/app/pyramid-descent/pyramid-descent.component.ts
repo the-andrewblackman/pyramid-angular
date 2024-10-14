@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
 	selector: "app-pyramid-descent",
@@ -8,6 +8,7 @@ import { HttpClient } from "@angular/common/http";
 })
 export class PyramidDescentComponent implements OnInit {
 	pyramidData: number[][] = []; // To hold the pyramid structure (rows of numbers)
+	directions: string = "";
 
 	constructor(private http: HttpClient) {}
 
@@ -17,8 +18,7 @@ export class PyramidDescentComponent implements OnInit {
 
 	// Fetch the data from the endpoint
 	fetchPyramidData(): void {
-		const endpoint = "https://localhost:8080/pyramidNumbers";
-
+		const endpoint = "http://localhost:8080/data";
 		this.http.get<number[]>(endpoint).subscribe(
 			(data) => {
 				this.distributeNumbersInPyramid(data);
@@ -30,9 +30,16 @@ export class PyramidDescentComponent implements OnInit {
 	}
 	// Fetch the directions (L, R) from the directions endpoint
 	fetchDirections(): void {
-		const directionsEndpoint = "https://localhost:8080/pyramidDirections";
+		const directionsEndpoint = "http://localhost:8080/directions";
+		const httpOptions = {
+			headers: new HttpHeaders({
+				Accept: "text/plain", // Ensure headers accept text/plain
+				"Content-Type": "text/plain",
+			}),
+			responseType: "text" as "json", // Treat the response as text but still work with Angular's type checking
+		};
 
-		this.http.get<string[]>(directionsEndpoint).subscribe(
+		this.http.get<string>(directionsEndpoint, httpOptions).subscribe(
 			(data) => {
 				this.directions = data; // Store directions
 				this.highlightPath(this.directions); // Highlight the path based on directions
@@ -58,13 +65,17 @@ export class PyramidDescentComponent implements OnInit {
 			rowIndex++;
 		}
 	}
-	highlightPath(directions: string[]): void {
+	highlightPath(directionsString: string): void {
 		let currentRow = 0;
 		let currentCol = 0;
 
+		// Assuming directionsString is a sequence like "RRLL"
 		this.highlightNumber(currentRow, currentCol); // Highlight the top row of the pyramid
 
-		directions.forEach((direction) => {
+		// Split the string into an array of characters for iteration
+		const directionsArray = directionsString.split("");
+
+		directionsArray.forEach((direction) => {
 			currentRow++;
 			if (direction === "L") {
 				// Stay in the same column
