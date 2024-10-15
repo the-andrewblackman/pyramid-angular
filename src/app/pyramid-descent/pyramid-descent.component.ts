@@ -9,6 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 export class PyramidDescentComponent implements OnInit {
 	pyramidData: number[][] = []; // To hold the pyramid structure (rows of numbers)
 	directions: string = "";
+	targetNumber: number = 0;
 
 	constructor(private http: HttpClient) {}
 
@@ -25,6 +26,18 @@ export class PyramidDescentComponent implements OnInit {
 			},
 			(error) => {
 				console.error("Error fetching data:", error);
+			}
+		);
+	}
+	// Fetch target
+	fetchTarget(): void {
+		const targetEndpoint = "http://localhost:8080/targets";
+		this.http.get<number>(targetEndpoint).subscribe(
+			(data: number) => {
+				this.targetNumber = data;
+			},
+			(error) => {
+				console.error("Error fetching target:", error);
 			}
 		);
 	}
@@ -54,6 +67,8 @@ export class PyramidDescentComponent implements OnInit {
 	distributeNumbersInPyramid(numbers: number[]): void {
 		let currentIndex = 0;
 		let rowIndex = 0;
+		// clear previous data if any
+		this.pyramidData = [];
 
 		while (currentIndex < numbers.length) {
 			const numbersInRow = rowIndex + 1;
