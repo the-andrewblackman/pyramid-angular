@@ -29,7 +29,9 @@ export class PyramidDescentComponent implements OnInit {
 				console.error("Error fetching data:", error);
 			}
 		);
-		this.fetchTarget();
+		setTimeout(() => {
+			this.fetchTarget();
+		}, 500);
 	}
 	// Fetch target
 	fetchTarget(): void {
