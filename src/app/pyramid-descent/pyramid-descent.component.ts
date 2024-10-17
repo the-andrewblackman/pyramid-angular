@@ -13,7 +13,9 @@ export class PyramidDescentComponent implements OnInit {
 
 	constructor(private http: HttpClient) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.fetchPyramidData();
+	}
 
 	// Fetch the data from the endpoint
 	fetchPyramidData(): void {
