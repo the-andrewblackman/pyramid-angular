@@ -7,19 +7,18 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 	styleUrls: ["./pyramid-descent.component.css"],
 })
 export class PyramidDescentComponent implements OnInit {
-	pyramidData: number[][] = []; // To hold the pyramid structure (rows of numbers)
+	pyramidData: number[][] = [];
 	directions: string = "";
 	targetNumber: number = 0;
 
 	constructor(private http: HttpClient) {}
 
-	ngOnInit(): void {
-		this.fetchPyramidData();
-	}
+	ngOnInit(): void {}
 
 	// Fetch the data from the endpoint
 	fetchPyramidData(): void {
 		const endpoint = "http://localhost:8080/data";
+
 		this.http.get<number[]>(endpoint).subscribe(
 			(data) => {
 				this.distributeNumbersInPyramid(data);
@@ -28,13 +27,17 @@ export class PyramidDescentComponent implements OnInit {
 				console.error("Error fetching data:", error);
 			}
 		);
+		this.fetchTarget();
 	}
 	// Fetch target
 	fetchTarget(): void {
-		const targetEndpoint = "http://localhost:8080/targets";
-		this.http.get<number>(targetEndpoint).subscribe(
-			(data: number) => {
-				this.targetNumber = data;
+		const targetEndpoint = "http://localhost:8080/directions";
+
+		this.http.get<string[]>(targetEndpoint).subscribe(
+			(data: string[]) => {
+				this.targetNumber = parseInt(data[0], 10);
+				console.log(this.targetNumber);
+				this.directions = data[1];
 			},
 			(error) => {
 				console.error("Error fetching target:", error);
@@ -43,24 +46,8 @@ export class PyramidDescentComponent implements OnInit {
 	}
 	// Fetch the directions (L, R) from the directions endpoint
 	fetchDirections(): void {
-		const directionsEndpoint = "http://localhost:8080/directions";
-		const httpOptions = {
-			headers: new HttpHeaders({
-				Accept: "text/plain", // Ensure headers accept text/plain
-				"Content-Type": "text/plain",
-			}),
-			responseType: "text" as "json", // Treat the response as text but still work with Angular's type checking
-		};
-
-		this.http.get<string>(directionsEndpoint, httpOptions).subscribe(
-			(data) => {
-				this.directions = data; // Store directions
-				this.highlightPath(this.directions); // Highlight the path based on directions
-			},
-			(error) => {
-				console.error("Error fetching directions:", error);
-			}
-		);
+		console.log(this.directions);
+		this.highlightPath(this.directions); // Highlight the path based on directions
 	}
 
 	// Function to distribute numbers into pyramid rows

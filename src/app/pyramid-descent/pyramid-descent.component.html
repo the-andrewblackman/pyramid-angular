@@ -1,7 +1,7 @@
 
 <h1>here</h1>
 <button (click)="fetchDirections()">ANSWER</button>
-<button (click)="fetchPyramidData(); fetchTarget()">GENERATE NEW</button>
+<button (click)="fetchPyramidData()">GENERATE NEW</button>
 <div>Target: {{ targetNumber }}</div>
 <div id="pyramid">
     <div *ngFor="let row of pyramidData; let rowIndex = index" class="pyramid-row">
