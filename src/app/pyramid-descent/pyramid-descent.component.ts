@@ -13,11 +13,8 @@ export class PyramidDescentComponent implements OnInit {
 
 	constructor(private http: HttpClient) {}
 
-	ngOnInit(): void {
-		this.fetchPyramidData();
-	}
+	ngOnInit(): void {}
 
-	// Fetch the data from the endpoint
 	fetchPyramidData(): void {
 		const endpoint = "http://localhost:8080/data";
 
@@ -29,9 +26,7 @@ export class PyramidDescentComponent implements OnInit {
 				console.error("Error fetching data:", error);
 			}
 		);
-		setTimeout(() => {
-			this.fetchTarget();
-		}, 500);
+		this.fetchTarget();
 	}
 	// Fetch target
 	fetchTarget(): void {
@@ -50,7 +45,6 @@ export class PyramidDescentComponent implements OnInit {
 	}
 	// Fetch the directions (L, R) from the directions endpoint
 	fetchDirections(): void {
-		console.log(this.directions);
 		this.highlightPath(this.directions); // Highlight the path based on directions
 	}
 

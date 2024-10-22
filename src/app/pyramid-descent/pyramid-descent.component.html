@@ -1,13 +1,24 @@
-
-<h1>here</h1>
-<button (click)="fetchDirections()">ANSWER</button>
-<button (click)="fetchPyramidData()">GENERATE NEW</button>
-<div>Target: {{ targetNumber }}</div>
-<div id="pyramid">
+<div class="header">
+  <h1 class="line"><span>PYRAMID DESCENT</span></h1>
+  <ul>
+    <li>Start at the top of the pyramid and navigate to the bottom.</li>
+    <li>Move either left or right to adjacent numbers on the row below.</li>
+    <li>Multiply the numbers you traverse.</li>
+    <li>Your goal is to find a path that results in the given target product.</li>
+  </ul>
+  <div class="button-container">
+    <button class="mover" (click)="fetchPyramidData()">GENERATE PYRAMID</button>
+    <button class="mover" (click)="fetchDirections()">GENERATE ANSWER</button>
+  </div>
+  <div class="target">Target Score: {{ targetNumber }}</div>
+</div>
+<div class="content">
+  <div id="pyramid">
     <div *ngFor="let row of pyramidData; let rowIndex = index" class="pyramid-row">
-      <div *ngFor="let number of row; let colIndex = index" class="pyramid-number" [attr.data-row]="rowIndex" [attr.data-col]="colIndex">
+      <div *ngFor="let number of row; let colIndex = index" class="pyramid-number" [attr.data-row]="rowIndex"
+        [attr.data-col]="colIndex">
         {{ number }}
       </div>
     </div>
   </div>
-  
+</div>

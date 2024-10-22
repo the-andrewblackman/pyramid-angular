@@ -1,16 +1,189 @@
+.header {
+      width: 100%;
+      background-color: rgba(22, 22, 22, 0.3) !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: -20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      text-align: center;
+      background: rgb(22, 22, 22);
+}
+
+.line span:before,
+.line span:after {
+      content: "";
+      position: absolute;
+      height: 5px;
+      border-bottom: 1px solid white;
+      border-top: 1px solid white;
+      top: 0;
+      width: 500px;
+}
+
+.line {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+.line span {
+      position: relative;
+      padding: 0 20px;
+      z-index: 1;
+      display: inline-block;
+}
+
+.line span:before,
+.line span:after {
+      content: "";
+      position: absolute;
+      height: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 150px;
+      border-top: 1px solid white;
+}
+
+.line span:before {
+      left: -140px;
+}
+
+.line span:after {
+      right: -140px;
+}
+
+.header h1 {
+      margin: 10px 0;
+      padding-bottom: 0px;
+}
+
+.header h4 {
+      color: white;
+      margin: 15px 0 5px 0;
+      border: 1px solid white;
+      padding: 10px;
+}
+
+.header button {
+      margin: 5px;
+}
+
+ul {
+      list-style-type: none;
+      padding: 0;
+      color: white;
+}
+
+.button-container {
+      width: 600px; /* adjust space between buttons */
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+      position: relative;
+      top: 10px;
+      margin: 0 0 30px 0;
+}
+
+.content {
+      margin-top: 320px; /* adjust pyramid height from header */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+}
+
+#pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+}
+
 .pyramid-row {
       display: flex;
       justify-content: center;
-      margin: 10px 0;
 }
+
 .pyramid-number {
-      margin: 5px;
-      padding: 10px;
-      background-color: yellow;
+      margin: 10px;
+      padding: 15px;
+      background-color: rgb(18, 88, 25);
       border: 1px solid #000;
       text-align: center;
+      color: white;
       width: 30px;
+      border-radius: 10px;
 }
-.highlight{
+
+button {
+      background: white;
+      border-radius: 10px;
+      padding: 7px;
+      font-weight: 700;
+}
+
+button.mover:hover {
+      background: black;
+      color: white;
+      transform: translate(0, 0.35em);
+}
+
+button.mover:hover::before {
+      box-shadow: 0 0 0 2px #0692c0, 0 0.5em 0 0 #d8f5fe;
+      transform: translate3d(0, 0.5em, -1em);
+}
+
+.target {
+      color: white;
+      margin: 5px;
+      padding: 7px;
+      border: 1px solid white;
+      border-radius: 10px;
+}
+
+h1 {
+      color: white;
+}
+
+p {
+      color: white;
+      padding: 10px;
+      margin: 0 0 10px 0;
+}
+
+.highlight {
       border: 3px solid red;
+}
+
+@media only screen and (max-width: 479px) {
+      .button-container {
+            width: 400px;
+      }
+
+      .pyramid-number {
+            margin: 8px;
+            padding: 12px;
+      }
+
+      .content {
+            margin-top: 400px;
+      }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+      .button-container {
+            width: 80%;
+      }
+      .content {
+            margin-top: 320px;
+      }
 }
