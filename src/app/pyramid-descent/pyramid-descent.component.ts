@@ -1,6 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
+interface NumbersResponse {
+	pyramidNums: number[];
+	target: number;
+	calculatedDirections: string;
+}
+
 @Component({
 	selector: "app-pyramid-descent",
 	templateUrl: "./pyramid-descent.component.html",
@@ -18,31 +24,19 @@ export class PyramidDescentComponent implements OnInit {
 	fetchPyramidData(): void {
 		const endpoint = "http://localhost:8080/data";
 
-		this.http.get<number[]>(endpoint).subscribe(
+		this.http.get<NumbersResponse>(endpoint).subscribe(
 			(data) => {
-				this.distributeNumbersInPyramid(data);
+				this.distributeNumbersInPyramid(data.pyramidNums);
+				this.directions = data.calculatedDirections;
+				this.targetNumber = data.target;
+				console.log("data");
 			},
 			(error) => {
 				console.error("Error fetching data:", error);
 			}
 		);
-		this.fetchTarget();
 	}
-	// Fetch target
-	fetchTarget(): void {
-		const targetEndpoint = "http://localhost:8080/directions";
 
-		this.http.get<string[]>(targetEndpoint).subscribe(
-			(data: string[]) => {
-				this.targetNumber = parseInt(data[0], 10);
-				console.log(this.targetNumber);
-				this.directions = data[1];
-			},
-			(error) => {
-				console.error("Error fetching target:", error);
-			}
-		);
-	}
 	// Fetch the directions (L, R) from the directions endpoint
 	fetchDirections(): void {
 		this.highlightPath(this.directions); // Highlight the path based on directions
