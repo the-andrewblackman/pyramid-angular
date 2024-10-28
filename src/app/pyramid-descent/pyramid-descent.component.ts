@@ -6,6 +6,17 @@ interface NumbersResponse {
 	target: number;
 	calculatedDirections: string;
 }
+interface Memoization {
+	numbs: number[][];
+	targ: number[];
+	direct: string[];
+}
+
+const memoizationData: Memoization = {
+	numbs: [],
+	targ: [],
+	direct: [],
+};
 
 @Component({
 	selector: "app-pyramid-descent",
@@ -16,25 +27,60 @@ export class PyramidDescentComponent implements OnInit {
 	pyramidData: number[][] = [];
 	directions: string = "";
 	targetNumber: number = 0;
+	index: number = 1;
+	totalFetched: number = 0; // Keep track of how many times data has been fetched
+	maxFetches: number = 1;
+	switcher: boolean = true;
 
 	constructor(private http: HttpClient) {}
 
 	ngOnInit(): void {}
 
+	fetchMax(): void {
+		const endpoint = "http://localhost:8080/max";
+		this.http.get<number>(endpoint).subscribe(
+			(data) => {
+				this.maxFetches = data;
+			},
+			(error) => {
+				console.error("Error fetching max number of files.", error);
+			}
+		);
+	}
+
 	fetchPyramidData(): void {
 		const endpoint = "http://localhost:8080/data";
 
-		this.http.get<NumbersResponse>(endpoint).subscribe(
-			(data) => {
-				this.distributeNumbersInPyramid(data.pyramidNums);
-				this.directions = data.calculatedDirections;
-				this.targetNumber = data.target;
-				console.log("data");
-			},
-			(error) => {
-				console.error("Error fetching data:", error);
-			}
-		);
+		if (this.totalFetched < this.maxFetches) {
+			this.http.get<NumbersResponse>(endpoint).subscribe(
+				(data) => {
+					this.distributeNumbersInPyramid(data.pyramidNums);
+					this.directions = data.calculatedDirections;
+					this.targetNumber = data.target;
+
+					// Cache
+					memoizationData.numbs.push(data.pyramidNums);
+					memoizationData.targ.push(data.target);
+					memoizationData.direct.push(data.calculatedDirections);
+
+					this.totalFetched++;
+
+					if (this.switcher) {
+						this.fetchMax();
+						this.switcher = false;
+					}
+				},
+				(error) => {
+					console.error("Error fetching data:", error);
+				}
+			);
+		} else {
+			// Use cached data
+			this.distributeNumbersInPyramid(memoizationData.numbs[this.index]);
+			this.targetNumber = memoizationData.targ[this.index]; // Assuming targ stores arrays of numbers
+			this.directions = memoizationData.direct[this.index]; // Assuming direct stores arrays of strings
+			this.index = (this.index + 1) % memoizationData.numbs.length; // Update index for next cycle
+		}
 	}
 
 	// Fetch the directions (L, R) from the directions endpoint
